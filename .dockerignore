@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.gitignore
+Dockerfile
+DEPLOY.md
+*.log
+tmp-*.png
+images
+README.md
+.DS_Store
+Thumbs.db
