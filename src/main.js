@@ -5,6 +5,10 @@ const openOfferButtons = document.querySelectorAll("[data-open-offer]");
 const closeOffer = document.querySelector("[data-close-offer]");
 const faqItems = document.querySelectorAll(".faq-list details");
 const buttons = document.querySelectorAll(".btn, .header-cta, .menu-toggle, .footer-link");
+const sectionLinks = [...document.querySelectorAll('.main-nav a[href^="#"]')];
+const linkedSections = sectionLinks
+  .map((link) => document.querySelector(link.getAttribute("href")))
+  .filter(Boolean);
 
 const openOfferModal = () => {
   if (modal instanceof HTMLDialogElement) {
@@ -34,6 +38,7 @@ menuToggle?.addEventListener("click", () => {
 
 nav?.addEventListener("click", (event) => {
   if (event.target instanceof HTMLAnchorElement) {
+    setActiveNavLink(event.target.hash.slice(1));
     closeMenu();
   }
 });
@@ -103,26 +108,55 @@ if ("IntersectionObserver" in window) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 }
 
-const sectionLinks = [...document.querySelectorAll('.main-nav a[href^="#"]')];
-const linkedSections = sectionLinks
-  .map((link) => document.querySelector(link.getAttribute("href")))
-  .filter(Boolean);
+const setActiveNavLink = (sectionId) => {
+  sectionLinks.forEach((link) => {
+    const isCurrent = Boolean(sectionId) && link.getAttribute("href") === `#${sectionId}`;
+    link.classList.toggle("is-active", isCurrent);
 
-if ("IntersectionObserver" in window && sectionLinks.length > 0) {
-  const navObserver = new IntersectionObserver(
-    (entries) => {
-      const visibleEntry = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (isCurrent) {
+      link.setAttribute("aria-current", "true");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+};
 
-      if (!visibleEntry) return;
+let navTicking = false;
 
-      sectionLinks.forEach((link) => {
-        link.classList.toggle("is-active", link.getAttribute("href") === `#${visibleEntry.target.id}`);
-      });
-    },
-    { threshold: [0.22, 0.42, 0.62], rootMargin: "-18% 0px -58% 0px" },
-  );
+const updateActiveNav = () => {
+  if (linkedSections.length === 0) return;
 
-  linkedSections.forEach((section) => navObserver.observe(section));
-}
+  const headerHeight = document.querySelector(".site-header")?.offsetHeight ?? 0;
+  const marker = window.scrollY + headerHeight + 96;
+  const firstSection = linkedSections[0];
+
+  if (marker < firstSection.offsetTop) {
+    setActiveNavLink(null);
+    return;
+  }
+
+  let currentSection = firstSection;
+
+  linkedSections.forEach((section) => {
+    if (section.offsetTop <= marker) {
+      currentSection = section;
+    }
+  });
+
+  setActiveNavLink(currentSection.id);
+};
+
+const requestActiveNavUpdate = () => {
+  if (navTicking) return;
+
+  navTicking = true;
+  window.requestAnimationFrame(() => {
+    updateActiveNav();
+    navTicking = false;
+  });
+};
+
+window.addEventListener("scroll", requestActiveNavUpdate, { passive: true });
+window.addEventListener("resize", requestActiveNavUpdate);
+window.addEventListener("hashchange", () => window.setTimeout(updateActiveNav, 120));
+updateActiveNav();

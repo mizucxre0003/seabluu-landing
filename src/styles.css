@@ -137,12 +137,22 @@ input {
   color: var(--primary);
 }
 
-.main-nav a.is-active {
+.main-nav a.is-active,
+.main-nav a[aria-current="true"] {
   color: var(--primary);
 }
 
-.main-nav a.is-active::after {
+.main-nav a.is-active::after,
+.main-nav a[aria-current="true"]::after {
+  content: "";
+  opacity: 1;
   transform: scaleX(1);
+}
+
+.main-nav a:not([aria-current="true"])::after {
+  content: none;
+  opacity: 0;
+  transform: scaleX(0);
 }
 
 .main-nav a {
@@ -158,8 +168,9 @@ input {
   height: 2px;
   background: var(--accent);
   border-radius: 999px;
+  opacity: 0;
   transform: scaleX(0);
-  transition: transform 180ms ease;
+  transition: opacity 180ms ease, transform 180ms ease;
 }
 
 .header-cta {
