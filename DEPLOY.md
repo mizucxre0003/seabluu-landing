@@ -7,7 +7,7 @@
 3. Source выбрать GitHub repository с этим проектом.
 4. Build method выбрать Dockerfile.
 5. Dockerfile path оставить `Dockerfile`.
-6. Port указать `8080`.
+6. Port указать `8000`.
 7. Health check path указать `/healthz`.
 8. Environment variables не требуются.
 
@@ -19,19 +19,19 @@ Koyeb сам подтянет код из GitHub, выполнит сборку 
 
 ```bash
 docker build -t seabluu-landing .
-docker run --rm -p 8080:8080 seabluu-landing
+docker run --rm -p 8000:8000 seabluu-landing
 ```
 
 После запуска открыть:
 
 ```text
-http://localhost:8080/
+http://localhost:8000/
 ```
 
 Проверка health endpoint:
 
 ```text
-http://localhost:8080/healthz
+http://localhost:8000/healthz
 ```
 
 ## Что внутри
@@ -39,4 +39,4 @@ http://localhost:8080/healthz
 Docker образ собирается в два этапа:
 
 1. `node:24-alpine` устанавливает зависимости через `npm ci` и собирает Vite-проект в `dist`.
-2. `nginx:1.27-alpine` отдаёт готовую статику из `/usr/share/nginx/html` на порту `8080`.
+2. `nginx:1.27-alpine` отдаёт готовую статику из `/usr/share/nginx/html` на порту `8000`.
