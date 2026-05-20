@@ -85,37 +85,38 @@ input {
 }
 
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  z-index: 100;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 24px;
-  width: min(1180px, calc(100% - 24px));
-  margin: 10px auto 0;
+  width: min(1180px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
+  margin: 0;
   padding: 12px 14px 12px 18px;
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(189, 232, 246, 0.9);
   border-radius: 28px;
   box-shadow: 0 16px 40px rgba(0, 91, 143, 0.1);
   backdrop-filter: blur(18px);
+  transform: translateX(-50%);
 }
 
 .brand {
-  display: grid;
-  line-height: 1.15;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
 }
 
-.brand__name {
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: var(--primary-dark);
-}
-
-.brand__tagline {
-  font-size: 0.72rem;
-  color: var(--text-muted);
+.brand__logo {
+  width: auto;
+  height: 48px;
+  max-width: 116px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(0, 91, 143, 0.08));
 }
 
 .main-nav {
@@ -208,8 +209,8 @@ input {
   min-height: min(760px, calc(100svh - 20px));
   display: grid;
   align-items: center;
-  margin-top: -72px;
-  padding-top: 152px;
+  margin-top: 0;
+  padding-top: 168px;
   overflow: hidden;
   background:
     radial-gradient(circle at 18% 24%, rgba(255, 232, 239, 0.86), transparent 22%),
@@ -1117,18 +1118,17 @@ p {
 
   .site-header {
     width: calc(100% - 16px);
-    margin-top: 8px;
+    max-width: calc(100vw - 16px);
+    top: 8px;
+    margin: 0;
     gap: 10px;
     padding: 10px;
     border-radius: 22px;
   }
 
-  .brand__name {
-    font-size: 1.08rem;
-  }
-
-  .brand__tagline {
-    font-size: 0.66rem;
+  .brand__logo {
+    height: 42px;
+    max-width: 88px;
   }
 
   .header-cta {
@@ -1139,8 +1139,8 @@ p {
 
   .hero {
     min-height: 650px;
-    margin-top: -68px;
-    padding-top: 132px;
+    margin-top: 0;
+    padding-top: 124px;
     align-items: start;
   }
 
